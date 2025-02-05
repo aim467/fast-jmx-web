@@ -14,7 +14,6 @@ service.interceptors.request.use(
     // 从 localStorage 获取 token
     // 从store中获取token
     const token = store.state.token;
-    console.log(config.url + " " + token);
     // 判断是否需要验证（登录接口不需要验证）
     const whiteList = ['/login'] // 白名单
     const isWhiteList = whiteList.some(path => config.url.includes(path))
@@ -47,8 +46,7 @@ service.interceptors.response.use(
         return res;
       case 401: // 未授权或token过期
         ElMessage.error(res.message || '登录已过期，请重新登录')
-        // 清除本地存储的用户信息
-        localStorage.removeItem('token')
+        store.commit('setToken', null);
         // 跳转到登录页
         router.push({
           path: '/login',
@@ -69,10 +67,9 @@ service.interceptors.response.use(
     if (error.response) {
       switch (error.response.status) {
         case 401:
-          ElMessage.error('登录已过期，请重新登录')
-          // 清除本地存储的用户信息
-          localStorage.removeItem('username')
-          // 跳转到登录页
+          ElMessage.error(error.response.data?.message || '登录已过期，请重新登录')
+          store.commit('setToken', null)  // 新增store token清除
+          // 跳转逻辑保持统一
           router.push({
             path: '/login',
             query: { redirect: router.currentRoute.value.fullPath }

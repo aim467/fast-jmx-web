@@ -84,7 +84,7 @@
         <el-row :span="24" class="thread-list">
             <el-table :data="threads" style="width: 100%" stripe height="700"
                 :header-cell-style="{ background: '#eef1f6', color: '#606266' }" @sort-change="handleSortChange">
-                <el-table-column prop="threadId" label="线程ID" width="80" sortable="custom" />
+                <el-table-column prop="threadId" label="线程ID" width="100" sortable="custom" />
                 <el-table-column prop="threadName" label="线程名称" width="200" sortable="custom">
                     <!--超过10字符显示省略号，并且tooltip显示全部内容-->
                     <template #default="scope">
@@ -95,7 +95,7 @@
                         </el-tooltip>
                     </template>
                 </el-table-column>
-                <el-table-column prop="threadState" label="线程状态" width="100" sortable="custom">
+                <el-table-column prop="threadState" label="线程状态" width="120" sortable="custom">
                     <template #default="scope">
                         <el-tag :type="getThreadStateType(scope.row.threadState)">
                             {{ scope.row.threadState }}
@@ -237,8 +237,6 @@ export default {
                 this.threads = this.sortThreads(threadsResponse.data)
                 this.threadStatics = staticsResponse.data
             } catch (error) {
-                ElMessage.error('获取线程信息失败：' + error.message)
-                console.error("Error fetching thread data:", error)
             } finally {
                 this.loading = false
             }
@@ -246,17 +244,14 @@ export default {
         printThreadStack() {
             getThreadDump(this.monitorId).then(response => {
                 this.stackData = response.data;
-                // 控制线程堆栈信息弹窗显示
                 this.threadStackDialogVisible = true;
             }).catch(error => {
-                console.error("Error fetching thread stack:", error);
             });
         },
         fetchThreadStatics(monitorId) {
             threadStatics(monitorId).then(response => {
                 this.threadStatics = response.data;
             }).catch(error => {
-                console.error("Error fetching thread statics:", error);
             });
         },
 
@@ -282,7 +277,6 @@ export default {
         // 刷新线程列表
         refreshThreads() {
             this.fetchThreads(this.monitorId);
-            this.fetchThreadStatics(this.monitorId);
         },
         // 设置刷新间隔
         setRefreshInterval() {
@@ -303,7 +297,7 @@ export default {
                 this.currentStackTrace = response.data;
                 this.stackTraceDialogVisible = true;
             }).catch(error => {
-                console.error("Error fetching thread stack:", error);
+                // 移除 console.error
             });
         },
         // 格式化时间显示
@@ -351,15 +345,13 @@ export default {
     created() {
         let monitorId = this.$route.query.monitorId || this.$store.state.monitorId;
         this.monitorId = monitorId;
-        this.fetchThreads(monitorId); // 页面加载时获取线程列表
-        this.fetchThreadStatics(monitorId);
+        this.fetchThreads(monitorId);
     },
     watch: {
         '$route'(to, from) {
             let monitorId = to.query.monitorId || this.$store.state.monitorId;
             this.monitorId = monitorId;
             this.fetchThreads(monitorId);
-            this.fetchThreadStatics(monitorId);
         }
     }
 };

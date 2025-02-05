@@ -50,7 +50,7 @@
         <div class="user-container">
             <el-dropdown trigger="click">
                 <span class="user-dropdown-link">
-                    <el-avatar size="small" icon="el-icon-user" />
+                    <!-- <el-avatar size="small" icon="el-icon-user" /> -->
                     <span class="username">admin</span>
                     <el-icon class="el-icon--right">
                         <arrow-down />
@@ -328,7 +328,6 @@ export default {
                 this.osInfo = res.data.osInfo;
                 this.osRuntimeInfo = res.data.osRuntimeInfo;
             }).catch(error => {
-                this.$message.error('刷新系统信息失败');
                 console.error(error);
             });
         },
@@ -396,9 +395,7 @@ export default {
         refreshSystemInfo() {
             this.isRefreshing = true;
             this.initSystemInfo().finally(() => {
-                setTimeout(() => {
-                    this.isRefreshing = false;
-                }, 500);
+                this.isRefreshing = false;
             });
         },
         handleLogout() {

@@ -28,7 +28,6 @@
             <el-input
               v-model.trim="loginForm.username"
               placeholder="请输入用户名"
-              :prefix-icon="User"
               clearable
               :disabled="loading"
               tabindex="1"
@@ -42,7 +41,6 @@
               v-model.trim="loginForm.password"
               type="password"
               placeholder="请输入密码"
-              :prefix-icon="Lock"
               show-password
               clearable
               :disabled="loading"
@@ -68,7 +66,6 @@
 </template>
 
 <script>
-import { User, Lock } from '@element-plus/icons-vue'
 import { getLogin } from '@/api/api'
 
 export default {
@@ -105,18 +102,14 @@ export default {
           getLogin(this.loginForm.username, this.loginForm.password)
             .then(res => {
               if (res.code === 200) {
-                console.log(res.data);
                 this.$store.commit("setToken", res.data)
                 this.$message.success('登录成功')
                 const redirect = this.$route.query.redirect
                 this.$router.push(redirect || '/')
               } else {
-                this.$message.error('登录失败')
               }
             })
             .catch((error) => {
-              console.log(error)
-              this.$message.error('请检查输入信息')
             })
             .finally(() => {
               this.loading = false

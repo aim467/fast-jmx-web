@@ -207,104 +207,17 @@ export default {
   data() {
     return {
       activeNames: ['1', '2', '3', '4'],
-      operatingSystemInfo: {
-        name: "Windows 11",
-        arch: "amd64",
-        availableProcessors: "12",
-        committedVirtualMemorySize: "708186112",
-        freePhysicalMemorySize: "5305028608",
-        freeSwapSpaceSize: "7542538240",
-        physicalMemoryUsagePercent: null,
-        processCpuLoad: "4.8950566548201796E-5",
-        processCpuTime: "1531250000",
-        systemCpuLoad: "0.060857213271659605",
-        systemLoadAverage: "-1.0",
-        totalPhysicalMemorySize: "34095157248",
-        usedPhysicalMemorySize: null,
-        totalSwapSpaceSize: "62185578496",
-        version: "10.0"
-      },
+      operatingSystemInfo: {},
       memoryInfo: {
-        heapMemoryUsage: {
-          poolName: null,
-          init: 534773760,
-          used: 48283944,
-          committed: 534773760,
-          max: 734003200,
-          type: null
-        },
-        nonHeapMemoryUsage: {
-          poolName: null,
-          init: 7667712,
-          used: 41851608,
-          committed: 45875200,
-          max: -1,
-          type: null
-        }
+        heapMemoryUsage: {},
+        nonHeapMemoryUsage: {}
       },
       jvmRuntimeInfo: {
-        bootClassPath: null,
-        bootClassPathSupported: "false",
-        classPath: "D:/Softwares/IntelliJ IDEA 2023.2.4/plugins/java/lib/jps-launcher.jar",
-        inputArguments: [
-          "-Xmx700m",
-          "-Djava.awt.headless=true",
-          "-Djna.boot.library.path=D:\\Softwares\\IntelliJ IDEA 2023.2.4/lib/jna/amd64",
-          "-Djna.nosys=true",
-          "-Djna.noclasspath=true",
-          "-Dpreload.project.path=E:/sunrise/fast-jmx-api",
-          "-Dpreload.config.path=C:/Users/root2z/AppData/Roaming/JetBrains/IntelliJIdea2024.1/options",
-          "-Dexternal.project.config=C:\\Users\\root2z\\AppData\\Local\\JetBrains\\IntelliJIdea2024.1\\projects\\fast-jmx-api.53a37965\\external_build_system",
-          "-Dcompile.parallel=false",
-          "-Drebuild.on.dependency.change=true",
-          "-Didea.IntToIntBtree.page.size=32768",
-          "-Djdt.compiler.useSingleThread=true",
-          "-Daether.connector.resumeDownloads=false",
-          "-Dio.netty.initialSeedUniquifier=-6944331284634914058",
-          "-Dfile.encoding=GBK",
-          "-Duser.language=zh",
-          "-Duser.country=CN",
-          "-Didea.paths.selector=IntelliJIdea2024.1",
-          "-Didea.home.path=D:/Softwares/IntelliJ IDEA 2023.2.4",
-          "-Didea.config.path=C:/Users/root2z/AppData/Roaming/JetBrains/IntelliJIdea2024.1",
-          "-Didea.plugins.path=C:/Users/root2z/AppData/Roaming/JetBrains/IntelliJIdea2024.1/plugins",
-          "-Djps.log.dir=C:/Users/root2z/AppData/Local/JetBrains/IntelliJIdea2024.1/log/build-log",
-          "-Djps.fallback.jdk.home=D:/Softwares/IntelliJ IDEA 2023.2.4/jbr",
-          "-Djps.fallback.jdk.version=17.0.10",
-          "-Dio.netty.noUnsafe=true",
-          "-Djava.io.tmpdir=C:/Users/root2z/AppData/Local/JetBrains/IntelliJIdea2024.1/compile-server/fast-jmx-api_58248bc8/_temp_",
-          "-Djps.backward.ref.index.builder=true",
-          "-Dide.propagate.context=false"
-        ],
-        libraryPath: "C:\\Program Files\\OpenJDK\\jdk-11.0.17.8-hotspot\\bin;C:\\Windows\\Sun\\Java\\bin;C:\\Windows\\system32;C:\\Windows;C:\\Program Files\\Common Files\\Oracle\\Java\\javapath;C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\javapath;D:\\DocumentTest\\chandao\\ZenTao\\zbox\\nssm\\win64;D:\\Softwares\\vm workstation\\bin\\;C:\\Program Files\\OpenJDK\\jdk-8.0.352.08-hotspot\\bin;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\Program Files\\TortoiseSVN\\bin;C:\\Program Files\\Bandizip\\;C:\\ProgramData\\chocolatey\\bin;C:\\Program Files\\Git\\cmd;D:\\Softwares\\apache-maven-3.8.6\\bin;C:\\Program Files\\dotnet\\;C:\\Program Files\\Go\\bin;D:\\Softwares\\ffmpeg\\bin;C:\\MinGWPosx\\bin;D:\\Softwares\\opencv\\build\\x64\\vc14\\bin;D:\\Softwares\\Anaconda3;D:\\Softwares\\Anaconda3\\Scripts;D:\\Softwares\\Anaconda3\\Library\\bin;C:\\Python27;C:\\Users\\root2z\\AppData\\Roaming\\nvm;C:\\Program Files\\nodejs;C:\\Users\\root2z\\AppData\\Local\\Microsoft\\WindowsApps;D:\\Softwares\\IntelliJ IDEA 2022.2.1\\bin;D:\\Softwares\\Microsoft VS Code\\bin;C:\\Users\\root2z\\AppData\\Local\\JetBrains\\Toolbo;D:\\Softwares\\bin;D:\\Softwares\\gradle\\bin;D:\\Softwares\\flutter\\bin;C:\\Program Files\\Redis\\;D:\\Softwares\\springboot-cli\\bin;C:\\Program Files\\Docker;C:\\Program Files\\python;C:\\Program Files\\python\\Scripts;D:\\Softwares\\BtSoft\\panel\\script;D:\\Softwares\\php-win;;C:\\Program Files\\Docker\\Docker\\resources\\bin;E:\\Software\\sniffnet\\;C:\\Users\\root2z\\AppData\\Local\\pnpm;C:\\Users\\root2z\\AppData\\Local\\Microsoft\\WindowsApps;D:\\Softwares\\IntelliJ IDEA 2022.2.1\\bin;C:\\Users\\root2z\\AppData\\Local\\JetBrains\\Toolbox\\scripts;C:\\Users\\root2z\\AppData\\Local\\Programs\\oh-my-posh\\bin;C:\\Users\\root2z\\go\\bin;%PyCharm%;C:\\Users\\root2z\\AppData\\Roaming\\nvm;C:\\Program Files\\nodejs;C:\\Users\\root2z\\AppData\\Local\\Microsoft\\WindowsApps;;D:\\Softwares\\IntelliJ IDEA 2023.2.4\\bin;;C:\\Users\\root2z\\AppData\\Local\\Programs\\Ollama;D:\\Softwares\\spring\\;%DevEco Studio%;C:\\Program Files\\mitmproxy\\bin;C:\\Users\\root2z\\AppData\\Roaming\\npm;E:\\Software\\Microsoft VS Code\\bin;.",
-        managementSpecVersion: "2.0",
-        name: "34004@matrix",
-        specName: "Java Virtual Machine Specification",
-        specVendor: "Oracle Corporation",
-        specVersion: "11",
-        startTime: "1736325196347",
-        systemProperties: {
-          "io.netty.processId": "240",
-          "java.vm.version": "11.0.17+8-adhoc..jdk11u",
-          "java.rmi.server.randomIDs": "true",
-          "sun.io.unicode.encoding": "UnicodeLittle",
-          "io.netty.machineId": "28:f0:76:ff:fe:16:65:0e",
-          "java.class.version": "55.0"
-        },
-        uptime: "1962409",
-        vmName: "OpenJDK 64-Bit Server VM",
-        vmVendor: "OpenLogic",
-        vmVersion: "11.0.17+8-adhoc..jdk11u"
+        systemProperties: {},
+        inputArguments: []
       },
-      classLoaderInfo: {
-        loadedClassCount: 4623,
-        totalLoadedClassCount: 4623,
-        unloadedClassCount: 0
-      },
-      compilationInfo: {
-        name: "HotSpot 64-Bit Tiered Compilers",
-        totalCompilationTime: "2265"
-      },
+      classLoaderInfo: {},
+      compilationInfo: {},
       monitorId: null
     }
   },
