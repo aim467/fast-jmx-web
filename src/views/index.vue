@@ -74,36 +74,77 @@
         </el-icon>
         <span>Jmx 管理</span>
     </el-button>
-    <el-drawer v-model="drawer" title="Jmx 管理" :direction="direction" :before-close="handleClose" size="65%">
-        <el-table :data="monitorList" width="100%">
-            <el-table-column prop="monitorId" label="监控ID" width="300" />
-            <el-table-column prop="name" label="连接名称" :show-overflow-tooltip="true" width="400" />
-            <el-table-column prop="jmxUrl" label="Jmx地址" :show-overflow-tooltip="true" width="400" />
-            <el-table-column prop="pid" label="进程ID" width="80" />
-            <el-table-column prop="type" label="类型" width="80">
-                <template v-slot="scope">
-                    <span>{{ getTypeLabel(scope.row.type) }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column label="操作" width="220">
-                <template #default="{ row }">
-                    <el-button type="primary" size="small" @click="connectMonitor(row)">连接</el-button>
-                </template>
-            </el-table-column>
-        </el-table>
+    <el-drawer v-model="drawer" :direction="direction" :before-close="handleClose" size="65%" class="modern-drawer">
+        <template #header>
+            <div class="drawer-header">
+                <el-icon class="drawer-icon"><Setting /></el-icon>
+                <div>
+                    <h3 class="drawer-title">JMX 连接管理</h3>
+                    <p class="drawer-subtitle">管理本地/远程 JMX 连接配置</p>
+                </div>
+            </div>
+        </template>
 
-        <div class="add-monitor">
-            <el-form ref="monitorForm" :model="monitorForm" :inline="true" :rules="jmxRule">
-                <el-form-item label="连接名" prop="name">
-                    <el-input v-model="monitorForm.name" />
-                </el-form-item>
-                <el-form-item label="Jmx地址" prop="jmxUrl">
-                    <el-input v-model="monitorForm.jmxUrl" />
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="addRemoteJmx">连接</el-button>
-                </el-form-item>
-            </el-form>
+        <div class="drawer-content">
+            <el-table :data="monitorList" class="clean-table" stripe>
+                <el-table-column prop="monitorId" label="监控ID" min-width="220" />
+                <el-table-column prop="name" label="连接名称" :show-overflow-tooltip="true" min-width="280" />
+                <el-table-column prop="jmxUrl" label="JMX 地址" :show-overflow-tooltip="true" min-width="400" />
+                <el-table-column prop="pid" label="进程ID" width="100" align="center" />
+                <el-table-column prop="type" label="类型" width="100" align="center">
+                    <template v-slot="scope">
+                        <el-tag :type="scope.row.type === 1 ? 'success' : 'warning'" effect="dark">
+                            {{ getTypeLabel(scope.row.type) }}
+                        </el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" width="140" align="center">
+                    <template #default="{ row }">
+                        <el-button type="success" size="small" round @click="connectMonitor(row)">
+                            <el-icon><Connection /></el-icon>
+                            连接
+                        </el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+
+            <div class="add-monitor">
+                <h4 class="form-title">新增 JMX 连接</h4>
+                <el-form ref="monitorForm" :model="monitorForm" :inline="false" :rules="jmxRule" label-position="top">
+                    <el-row :gutter="20">
+                        <el-col :span="8">
+                            <el-form-item label="连接名称" prop="name">
+                                <el-input 
+                                    v-model="monitorForm.name" 
+                                    placeholder="请输入连接名称"
+                                    prefix-icon="Connection"
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="14">
+                            <el-form-item label="JMX 地址" prop="jmxUrl">
+                                <el-input 
+                                    v-model="monitorForm.jmxUrl" 
+                                    placeholder="例：service:jmx:rmi:///jndi/rmi://127.0.0.1:9010/jmxrmi"
+                                    prefix-icon="Link"
+                                />
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="2">
+                            <el-form-item>
+                                <el-button 
+                                    type="primary" 
+                                    style="margin-top: 24px"
+                                    @click="addRemoteJmx"
+                                >
+                                    <el-icon><Plus /></el-icon>
+                                    添加
+                                </el-button>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </div>
         </div>
     </el-drawer>
 
@@ -252,7 +293,7 @@
 
 <script>
 import { getMonitorList, connectJmx, addMonitor, getSystemInfo, logout } from '@/api/api';
-import { House, Monitor, Cpu, Connection, Histogram, Management, Setting, Refresh, ArrowDown, SwitchButton } from '@element-plus/icons-vue'
+import { House, Monitor, Cpu, Connection, Histogram, Management, Setting, Refresh, ArrowDown, SwitchButton, Plus } from '@element-plus/icons-vue'
 
 export default {
     components: {
@@ -265,7 +306,8 @@ export default {
         Setting,
         Refresh,
         ArrowDown,
-        SwitchButton
+        SwitchButton,
+        Plus
     },
     data() {
         return {
@@ -340,6 +382,10 @@ export default {
             this.$router.push({ path: path, query: { monitorId: this.$store.state.monitorId } });
         },
         handleClose() {
+            this.monitorForm = {
+                name: null,
+                jmxUrl: null
+            };
             this.drawer = false;
         },
         connectMonitor(row) {
@@ -361,8 +407,8 @@ export default {
                         this.$message.success(res.message);
                         this.getMonitors();
                         this.handleClose();
-                        this.$store.commit("setMonitorId", res.data.monitorId);
-                        this.$router.push({ path: '/mbean', query: { monitorId: res.data.monitorId } });
+                        this.$store.commit("setMonitorId", res.data);
+                        this.$router.push({ path: '/basic', query: { monitorId: res.data } });
                     }).catch(error => {
                         console.log(error);
                     })
@@ -422,7 +468,7 @@ export default {
 }
 
 .add-monitor {
-    margin: 20px;
+    margin: 10px;
 }
 
 .drawer-trigger {
@@ -762,5 +808,114 @@ export default {
 
 :deep(.el-dropdown-menu__item .el-icon) {
     margin-right: 4px;
+}
+
+/* 新增样式 */
+.drawer-header {
+    display: flex;
+    align-items: center;
+    padding: 0px 16px 10px 0px;
+    border-bottom: 1px solid #e2e8f0;
+    margin-bottom:  0px !important;
+}
+
+.drawer-icon {
+    font-size: 28px;
+    color: #1e80ff;
+    margin-right: 16px;
+}
+
+.drawer-title {
+    margin: 0;
+    color: #1f2937;
+    font-size: 18px;
+}
+
+.drawer-subtitle {
+    margin: 4px 0 0;
+    color: #6b7280;
+    font-size: 12px;
+}
+
+.drawer-content {
+    background: #ffffff;
+}
+
+.form-title {
+    margin: 10px 0 15px;
+    color: #1f2937;
+    font-size: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.add-monitor {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-radius: 6px;
+}
+
+/* 优化表格样式 */
+:deep(.el-table) {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
+}
+
+:deep(.el-table__header th) {
+    background-color: #f3f4f6 !important;
+    color: #374151;
+    font-weight: 600;
+}
+
+:deep(.el-table__row:hover) {
+    background-color: #f8fafc !important;
+}
+
+/* 优化输入框样式 */
+:deep(.el-input__inner) {
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+:deep(.el-input__inner:focus) {
+    border-color: #1e80ff;
+    box-shadow: 0 0 0 2px rgba(30, 128, 255, 0.2);
+}
+
+/* 优化抽屉样式 */
+:deep(.el-drawer) {
+    box-shadow: none !important;
+    border-left: 1px solid #f0f2f5;
+}
+
+:deep(.el-drawer__header) {
+    margin-bottom: 0 !important;
+    padding: 16px 24px;
+}
+
+.clean-table {
+    margin: 12px 0 20px;
+    border: 1px solid #f0f2f5;
+}
+
+/* 调整表格间距 */
+:deep(.el-table__header th) {
+    padding: 12px 0 !important;
+}
+
+:deep(.el-table__body td) {
+    padding: 8px 0 !important;
+}
+
+/* 简化输入框样式 */
+:deep(.el-input__inner) {
+    box-shadow: none !important;
+    border-color: #e4e7ed;
+}
+
+:deep(.el-input__inner:focus) {
+    border-color: #1e80ff;
+    box-shadow: 0 0 0 1px rgba(30, 128, 255, 0.2) !important;
 }
 </style>
